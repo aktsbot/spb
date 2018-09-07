@@ -1,3 +1,4 @@
+// Change these as needed :)
 module.exports = {
   db: 'mongodb://localhost/spb',
   port: 3030,

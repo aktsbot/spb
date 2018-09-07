@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
       spb: [s]imple [p]aste[b]in.
 
   SYNOPSIS
-      <command> | curl -F 'spb=<-' https://spb.aktsbot.in
+      <command> | curl -F 'spb=<-' ${config.host}
 
   DESCRIPTION
       As of now, spb only accepts text (as a pastebin should)
@@ -45,9 +45,9 @@ app.get('/', (req, res) => {
       Inspiration from https://github.com/rupa/sprunge.
 
   EXAMPLES
-      ~$ cat ~/tmp/foo.txt | curl -F 'spb=<-' https://spb.aktsbot.in
-         https://spb.aktsbot.in/f85c64
-      ~$ firefox https://spb.aktsbot.in/f85c64
+      ~$ cat ~/tmp/foo.txt | curl -F 'spb=<-' ${config.host}
+         ${config.host}/f85c64
+      ~$ firefox ${config.host}/f85c64
 
   SEE ALSO
       https://github.com/aktsbot/spb
@@ -93,7 +93,7 @@ app.get('/:gid', async (req, res) => {
       return res.status(404).send('not found\n');
     }
 
-    return res.status(200).send(`${p_find.content}\n`);
+    return res.status(200).send(`${p_find.content}`);
   } catch (e) {
     return res.status(500).send('fetch met unexpected errors\n');
   }
