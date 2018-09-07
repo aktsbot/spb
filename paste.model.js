@@ -4,7 +4,8 @@ const PasteSchema = new mongoose.Schema(
   {
     id_gen: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     content: {
       type: String,
