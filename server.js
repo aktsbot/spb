@@ -11,6 +11,11 @@ const upload = multer();
 
 const app = express();
 
+app.use((req, res, next) => {
+  res.set('Content-Type', 'text/plain');
+  next();
+});
+
 // enable logging
 app.use(morgan('short'));
 
@@ -24,8 +29,31 @@ mongoose.connection.once('open', () => {
 const Paste = require('./paste.model');
 
 // routes - start
-app.get('/h', (req, res) => {
-  return res.status(200).send('OK\n');
+app.get('/', (req, res) => {
+  const html = `
+  spb(1)                          SPB                          spb(1)
+
+  NAME
+      spb: [s]imple [p]aste[b]in.
+
+  SYNOPSIS
+      <command> | curl -F 'spb=<-' https://spb.aktsbot.in
+
+  DESCRIPTION
+      As of now, spb only accepts text (as a pastebin should)
+      and the payload should be send a multipart-formdata.
+      Inspiration from https://github.com/rupa/sprunge.
+
+  EXAMPLES
+      ~$ cat ~/tmp/foo.txt | curl -F 'spb=<-' https://spb.aktsbot.in
+         https://spb.aktsbot.in/f85c64
+      ~$ firefox https://spb.aktsbot.in/f85c64
+
+  SEE ALSO
+      https://github.com/aktsbot/spb
+  `;
+
+  return res.status(200).send(html);
 });
 
 app.post('/', upload.none(), async (req, res) => {
