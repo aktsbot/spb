@@ -1,35 +1,26 @@
-const config = require('./config');
-const express = require('express');
-const morgan = require('morgan');
+import express from "express";
+import morgan from "morgan";
 
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+import { nanoid } from "nanoid";
 
-const random = require('crypto-random-string');
-const multer = require('multer');
+import multer from "multer";
 const upload = multer();
+
+import config from "./config.js";
+import db from "./db.js";
 
 const app = express();
 
 app.use((req, res, next) => {
-  res.set('Content-Type', 'text/plain');
+  res.set("Content-Type", "text/plain");
   next();
 });
 
 // enable logging
-app.use(morgan('short'));
-
-// connecting to our database
-mongoose.connect(config.db);
-mongoose.connection.on('error', console.error.bind(console, '[spb] db connection error'));
-mongoose.connection.once('open', () => {
-  console.log('[spb] db connection sucess');
-});
-
-const Paste = require('./paste.model');
+app.use(morgan("short"));
 
 // routes - start
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   const html = `
   spb(1)                          SPB                          spb(1)
 
@@ -56,46 +47,50 @@ app.get('/', (req, res) => {
   return res.status(200).send(html);
 });
 
-app.post('/', upload.none(), async (req, res) => {
+app.post("/", upload.none(), async (req, res) => {
   try {
     if (!req.body.spb) {
-      return res.status(400).send('bad data\n');
+      return res.status(400).send("bad data\n");
     }
 
-    let gid = random(6);
+    let gid = nanoid(6);
 
-    let n_paste = new Paste({
+    let n_paste = {
       id_gen: gid,
-      content: req.body.spb
-    });
+      content: req.body.spb,
+    };
 
-    let n_save = await n_paste.save();
-
-    if (!n_save) {
-      return res.status(500).send('save failed\n');
-    }
+    db.run(
+      `INSERT INTO pastes (id_gen, content) VALUES (@id_gen, @content)`,
+      n_paste
+    );
 
     return res.status(200).send(`${config.host}/${gid}\n`);
   } catch (e) {
-    return res.status(500).send('save met unexpected errors\n');
+    return res.status(500).send("save met unexpected errors\n");
   }
 });
 
-app.get('/:gid', async (req, res) => {
+app.get("/:gid", async (req, res) => {
   try {
     if (req.params.gid && req.params.gid.length < 6) {
-      return res.status(400).send('bad data\n');
+      return res.status(400).send("bad data\n");
     }
 
-    let p_find = await Paste.findOne({ id_gen: req.params.gid }, { content: 1 });
+    const p_find = db.query(
+      `SELECT content from pastes WHERE id_gen=@id_gen LIMIT 1`,
+      {
+        id_gen: req.params.gid,
+      }
+    );
 
-    if (!p_find) {
-      return res.status(404).send('not found\n');
+    if (p_find.length === 0) {
+      return res.status(404).send("not found\n");
     }
 
-    return res.status(200).send(`${p_find.content}`);
+    return res.status(200).send(`${p_find[0]["content"]}`);
   } catch (e) {
-    return res.status(500).send('fetch met unexpected errors\n');
+    return res.status(500).send("fetch met unexpected errors\n");
   }
 });
 // routes - end

@@ -2,7 +2,7 @@
 
 ## What?
 
-This is a simple pastebin made with `node.js` &amp; a `mongodb` backend.
+This is a simple pastebin made with `node.js` &amp; a `sqlite3` backend.
 
 ## Why ?
 
@@ -13,7 +13,10 @@ I needed my own pastebin for "research" ;)
 - clone the repo
 - take a look at [config.js](./config.js)
 - `$ npm install`
-- have mongodb running
+- Get sqlite database ready
+  ```
+  sqlite3 spb.db < sql/pastes.sql
+  ```
 - `$ npm start`
 - pop open `http://localhost:3030` on the browser
 

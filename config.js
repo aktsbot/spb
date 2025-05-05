@@ -1,6 +1,8 @@
 // Change these as needed :)
-module.exports = {
-  db: 'mongodb://localhost/spb',
+const config = {
+  db: "spb.db", // path to sqlite db
   port: 3030,
-  host: 'http://localhost:3030'
+  host: "http://localhost:3030",
 };
+
+export default config;
