@@ -4,6 +4,8 @@
 
 This is a simple pastebin made with `node.js` &amp; a `sqlite3` backend.
 
+The old mongodb codebase is in the [mongodb](https://github.com/aktsbot/spb/tree/mongodb) branch.
+
 ## Why ?
 
 I needed my own pastebin for "research" ;)
