@@ -1,6 +1,6 @@
 {
   "name": "spb",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A [s]imple [p]aste [b]in",
   "main": "server.js",
   "type": "module",

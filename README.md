@@ -31,6 +31,24 @@ https://spb.aktsbot.in
 - http://sprunge.us/
 - http://ix.io/
 
+## Migration from mongodb to sqlite3
+
+The initial version of spb was built to use mongodb for its database. This new version
+will be using sqlite. 
+
+If you have a good chunk of pastes that you wish to move over, here's what you do
+
+- hop on the vm and take a mongodb dump like so
+  ```
+  mongoexport -d spb -c pastes --jsonArray -o pastes.json
+  ```
+  this create a `pastes.json` file which holds all of your old data.
+
+- copy the `pastes.json` file into the `extras` folder and then run 
+  ```
+  node extras/mongo_migrate.js
+  ```
+
 ## License
 
 [WTFPL](http://www.wtfpl.net/)
