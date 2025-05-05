@@ -4,7 +4,7 @@
 
 This is a simple pastebin made with `node.js` &amp; a `sqlite3` backend.
 
-The old mongodb codebase is in the [mongodb](https://github.com/aktsbot/spb/tree/mongodb) branch.
+Note: The old mongodb codebase is in the [mongodb](https://github.com/aktsbot/spb/tree/mongodb) branch.
 
 ## Why ?
 
@@ -17,7 +17,7 @@ I needed my own pastebin for "research" ;)
 - `$ npm install`
 - Get sqlite database ready
   ```
-  sqlite3 spb.db < sql/pastes.sql
+  $ sqlite3 spb.db < sql/pastes.sql
   ```
 - `$ npm start`
 - pop open `http://localhost:3030` on the browser
@@ -40,14 +40,26 @@ If you have a good chunk of pastes that you wish to move over, here's what you d
 
 - hop on the vm and take a mongodb dump like so
   ```
-  mongoexport -d spb -c pastes --jsonArray -o pastes.json
+  $ mongoexport -d spb -c pastes --jsonArray -o pastes.json
   ```
   this create a `pastes.json` file which holds all of your old data.
 
 - copy the `pastes.json` file into the `extras` folder and then run 
   ```
-  node extras/mongo_migrate.js
+  $ node extras/mongo_migrate.js
   ```
+  You might see a warning like so which you can ignore.
+  ```
+  (node:10559) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+  (Use `node --trace-warnings ...` to show where the warning was created)
+  ```
+
+  Please make sure you setup the sqlite database before hand
+  ```
+  $ sqlite3 spb.db < sql/pastes.sql
+  ```
+  
+  
 
 ## License
 
